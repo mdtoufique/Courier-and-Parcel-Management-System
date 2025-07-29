@@ -1,0 +1,25 @@
+# Node.js (backend)
+backend/node_modules/
+backend/.env
+backend/.vscode/
+
+# Vite React (frontend)
+client/node_modules/
+client/dist/
+client/.env
+client/.vscode/
+
+# Logs
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# IDE/editor settings
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# OS-generated files
+Thumbs.db
+ehthumbs.db
