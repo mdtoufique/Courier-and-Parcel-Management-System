@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import { loginUser } from "../api/api";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -14,21 +14,19 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    setError("");
     setLoading(true);
 
     try {
-      
-      const res = await axios.post("/api/auth/login", formData);
+      const res = await loginUser(formData);
 
-      // Save token & user data (example: localStorage)
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // Optionally save token/user here if you want
+      // localStorage.setItem("token", res.data.token);
+      // localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      toast.success("Login successful!");
 
       setLoading(false);
 
-      // Redirect based on user role
       const role = res.data.user.role;
       if (role === "admin") {
         navigate("/admin/dashboard");
@@ -39,7 +37,8 @@ const Login = () => {
       }
     } catch (err) {
       setLoading(false);
-      setError(err.response?.data?.message || "Login failed");
+      const message = err.response?.data?.message || "Login failed";
+      toast.error(message);
     }
   };
 
@@ -47,9 +46,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg">
         <h2 className="text-3xl font-bold mb-6 text-center">Login to Your Account</h2>
-        {error && (
-          <div className="mb-4 text-red-600 text-center font-medium">{error}</div>
-        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <input
             type="email"

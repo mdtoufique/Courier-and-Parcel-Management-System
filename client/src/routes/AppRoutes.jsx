@@ -6,7 +6,7 @@ import CustomerDashboard from "../pages/customer/Dashboard";
 import ParcelBooking from "../pages/customer/ParcelBooking";
 
 const AppRoutes = () => (
-	<Router>
+	
 		<Routes>
 			<Route path="/" element={<Home />} />
 			<Route path="/login" element={<Login />} />
@@ -30,7 +30,7 @@ const AppRoutes = () => (
 			<Route path="/customer/dashboard" element={<CustomerDashboard />} />
       <Route path="/customer/book-parcel" element={<ParcelBooking />} />
 		</Routes>
-	</Router>
+
 );
 
 export default AppRoutes;
