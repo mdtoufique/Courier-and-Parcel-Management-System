@@ -1,6 +1,9 @@
-import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
 
+import Footer from "../components/Footer";
+import { useState,useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 const FeatureCard = ({ title, desc }) => (
   <div className="bg-white p-6 rounded-2xl shadow hover:shadow-md transition">
     <h3 className="text-xl font-semibold mb-2">{title}</h3>
@@ -10,6 +13,17 @@ const FeatureCard = ({ title, desc }) => (
 
 
 const Home = () => {
+
+  const { user, loading } = useAuth();
+  const navigate=useNavigate();
+  useEffect(() => {
+    if (!loading && user) {
+      navigate(`/${user.role}/dashboard`);
+    }
+  }, [user, loading, navigate]);
+
+  if (loading || user) return null;
+
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gray-50 text-gray-900">
       {/* Hero Section */}

@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../api/api";
 import { toast } from "react-hot-toast";
-
+import { useAuth } from "../context/AuthContext";
 const Register = () => {
-  const navigate = useNavigate();
+   const { user, loading } = useAuth();
+    const navigate=useNavigate();
+    useEffect(() => {
+      if (!loading && user) {
+        navigate(`/${user.role}/dashboard`);
+      }
+    }, [user, loading, navigate]);
+  
+    if (loading || user) return null;
+
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [regloading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -21,7 +31,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await registerUser({ ...formData, role: "customer" });
+      await registerUser(formData);
       toast.success("Registration successful!");
       setLoading(false);
       navigate("/login");
@@ -70,10 +80,10 @@ const Register = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={regloading}
             className="w-full bg-blue-600 text-white py-3 rounded-xl text-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? "Signing Up..." : "Sign Up"}
+            {regloading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
 

@@ -4,14 +4,15 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import CustomerDashboard from "../pages/customer/Dashboard";
 import ParcelBooking from "../pages/customer/ParcelBooking";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => (
-	
+		
 		<Routes>
 			<Route path="/" element={<Home />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-			{/* <Route
+			<Route
 				path="/customer/dashboard"
 				element={
 					<ProtectedRoute allowedRoles={["customer"]}>
@@ -26,9 +27,7 @@ const AppRoutes = () => (
 						<ParcelBooking />
 					</ProtectedRoute>
 				}
-			/> */}
-			<Route path="/customer/dashboard" element={<CustomerDashboard />} />
-      <Route path="/customer/book-parcel" element={<ParcelBooking />} />
+			/>
 		</Routes>
 
 );

@@ -7,26 +7,96 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchParcels = async () => {
-      try {
-        setLoading(true);
-        setError("");
-        // Replace with your backend API endpoint
-        const token = localStorage.getItem("token");
-        const res = await axios.get("/api/parcels/my", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setParcels(res.data);
-      } catch (err) {
-        setError("Failed to fetch parcels.",err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const dummyParcels = [
+  {
+    _id: "PCL123456",
+    pickupAddress: "123 Main St, Dhaka",
+    deliveryAddress: "456 Market Rd, Chittagong",
+    status: "in transit",
+    paymentMethod: "cash",
+  },
+  {
+    _id: "PCL123457",
+    pickupAddress: "789 Park Ave, Sylhet",
+    deliveryAddress: "101 River St, Barisal",
+    status: "delivered",
+    paymentMethod: "card",
+  },
+  {
+    _id: "PCL123458",
+    pickupAddress: "55 Lake View, Rajshahi",
+    deliveryAddress: "77 Hill Rd, Khulna",
+    status: "pending",
+    paymentMethod: "online",
+  },
+    {
+    _id: "PCL123456",
+    pickupAddress: "123 Main St, Dhaka",
+    deliveryAddress: "456 Market Rd, Chittagong",
+    status: "in transit",
+    paymentMethod: "cash",
+  },
+  {
+    _id: "PCL123457",
+    pickupAddress: "789 Park Ave, Sylhet",
+    deliveryAddress: "101 River St, Barisal",
+    status: "delivered",
+    paymentMethod: "card",
+  },
+  {
+    _id: "PCL123458",
+    pickupAddress: "55 Lake View, Rajshahi",
+    deliveryAddress: "77 Hill Rd, Khulna",
+    status: "pending",
+    paymentMethod: "online",
+  },
+    {
+    _id: "PCL123456",
+    pickupAddress: "123 Main St, Dhaka",
+    deliveryAddress: "456 Market Rd, Chittagong",
+    status: "in transit",
+    paymentMethod: "cash",
+  },
+  {
+    _id: "PCL123457",
+    pickupAddress: "789 Park Ave, Sylhet",
+    deliveryAddress: "101 River St, Barisal",
+    status: "delivered",
+    paymentMethod: "card",
+  },
+  {
+    _id: "PCL123458",
+    pickupAddress: "55 Lake View, Rajshahi",
+    deliveryAddress: "77 Hill Rd, Khulna",
+    status: "pending",
+    paymentMethod: "online",
+  },
+];
 
-    fetchParcels();
-  }, []);
+useEffect(() => {
+  setParcels(dummyParcels);
+  setLoading(false);
+}, []);
+  // useEffect(() => {
+  //   const fetchParcels = async () => {
+  //     try {
+  //       setLoading(true);
+  //       setError("");
+  //       // Replace with your backend API endpoint
+  //       const token = localStorage.getItem("token");
+  //       const res = await axios.get("/api/parcels/my", {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       });
+  //       setParcels(res.data);
+  //     } catch (err) {
+  //       setError("Failed to fetch parcels.",err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchParcels();
+  // }, []);
 
   return (
     <div className="max-w-5xl mx-auto p-6 mt-10">
@@ -39,7 +109,6 @@ const Dashboard = () => {
           Book New Parcel
         </Link>
       </div>
-        {console.log(parcels.length,loading)}
       {loading && <p>Loading parcels...</p>}
       {error && <p className="text-red-600">{error}</p>}
 

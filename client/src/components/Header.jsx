@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // ✅ import useAuth
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useAuth(); // ✅ get user and logout from context
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navLinks = [
     { to: "/", label: "Home" },
-    { to: "/login", label: "Login" },
-    { to: "/register", label: "Register" },
+    ...(user
+      ? []
+      : [
+          { to: "/login", label: "Login" },
+          { to: "/register", label: "Register" },
+        ]),
   ];
 
   return (
@@ -19,7 +25,7 @@ const Header = () => {
           CourierTracker
         </Link>
 
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden md:flex space-x-6 items-center">
           {navLinks.map(({ to, label }) => (
             <NavLink
               key={to}
@@ -33,6 +39,15 @@ const Header = () => {
               {label}
             </NavLink>
           ))}
+
+          {user && (
+            <button
+              onClick={logout}
+              className="ml-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Logout
+            </button>
+          )}
         </nav>
 
         {/* Mobile menu button */}
@@ -84,6 +99,18 @@ const Header = () => {
               {label}
             </NavLink>
           ))}
+
+          {user && (
+            <button
+              onClick={() => {
+                logout();
+                setIsOpen(false);
+              }}
+              className="block w-full text-left font-medium text-red-600 hover:underline"
+            >
+              Logout
+            </button>
+          )}
         </nav>
       )}
     </header>
