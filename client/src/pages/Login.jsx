@@ -9,7 +9,7 @@ const Login = () => {
 	const { loading,user, setUser } = useAuth();
 	const [formData, setFormData] = useState({ email: "", password: "" });
 	const [Logloading, setLoading] = useState(false);
-	
+	const [showPassword, setShowPassword] = useState(false);
 	const handleChange = (e) => {
 		setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
@@ -56,7 +56,7 @@ const Login = () => {
 	};
 
 	return (
-		<div className="bg-red-600 min-h-screen flex items-center justify-center bg-gray-50 px-4">
+		<div className=" min-h-screen flex items-center justify-center bg-gray-50 px-4">
 			<div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg">
 				<h2 className="text-3xl font-bold mb-6 text-center">
 					Login to Your Account
@@ -73,15 +73,24 @@ const Login = () => {
 						onChange={handleChange}
 					/>
 
-					<input
-						type="password"
-						name="password"
-						placeholder="Password"
-						required
-						className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-						value={formData.password}
-						onChange={handleChange}
-					/>
+					<div className="relative">
+						<input
+							type={showPassword ? "text" : "password"} 
+							name="password"
+							placeholder="Password"
+							required
+							className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							value={formData.password}
+							onChange={handleChange}
+						/>
+						<button
+							type="button"
+							onClick={() => setShowPassword((prev) => !prev)}
+							className="absolute right-3 top-3 text-sm text-blue-600 hover:underline"
+						>
+							{showPassword ? "Hide" : "Show"}
+						</button>
+					</div>
 
 					<button
 						type="submit"

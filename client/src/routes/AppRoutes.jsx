@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import CustomerDashboard from "../pages/customer/Dashboard";
+import AdminDashboard from "../pages/admin/Dashboard";
 import ParcelBooking from "../pages/customer/ParcelBooking";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -17,6 +18,14 @@ const AppRoutes = () => (
 				element={
 					<ProtectedRoute allowedRoles={["customer"]}>
 						<CustomerDashboard />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/admin/dashboard"
+				element={
+					<ProtectedRoute allowedRoles={["admin"]}>
+						<AdminDashboard />
 					</ProtectedRoute>
 				}
 			/>

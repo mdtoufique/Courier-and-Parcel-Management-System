@@ -10,7 +10,7 @@ function App() {
       <Toaster position="top-center" />
       <Header />
       
-      <main className="flex-1">
+      <main className="bg-[#f6f6e9] flex-1">
         <AppRoutes />
       </main>
       

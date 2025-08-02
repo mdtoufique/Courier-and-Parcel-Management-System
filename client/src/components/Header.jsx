@@ -31,7 +31,7 @@ const Header = () => {
               key={to}
               to={to}
               className={({ isActive }) =>
-                `font-medium hover:text-blue-600 ${
+                `font-medium bg-stone-200 px-4 py-2 rounded hover:text-blue-600 ${
                   isActive ? "text-blue-700 underline" : "text-gray-700"
                 }`
               }
