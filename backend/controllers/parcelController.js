@@ -3,7 +3,7 @@ import Counter from "../models/Counter.js";
 
 // Create Parcel
 export const createParcel = async (req, res) => {
-	console.log("hi");
+	
 	try {
 		const {
 			pickupAddress,

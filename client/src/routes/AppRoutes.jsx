@@ -6,7 +6,8 @@ import CustomerDashboard from "../pages/customer/Dashboard";
 import AdminDashboard from "../pages/admin/Dashboard";
 import ParcelBooking from "../pages/customer/ParcelBooking";
 import ProtectedRoute from "./ProtectedRoute";
-
+import ParcelControl from "../pages/admin/ParcelControl";
+import AgentDashboard from "../pages/agent/Dashboard";
 const AppRoutes = () => (
 		
 		<Routes>
@@ -22,10 +23,26 @@ const AppRoutes = () => (
 				}
 			/>
 			<Route
+				path="/agent/dashboard"
+				element={
+					<ProtectedRoute allowedRoles={["agent"]}>
+						<AgentDashboard />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
 				path="/admin/dashboard"
 				element={
 					<ProtectedRoute allowedRoles={["admin"]}>
 						<AdminDashboard />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/admin/parcel-control"
+				element={
+					<ProtectedRoute allowedRoles={["admin"]}>
+						<ParcelControl />
 					</ProtectedRoute>
 				}
 			/>

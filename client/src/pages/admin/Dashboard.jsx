@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { fetchParcels } from "../../api/api";
 import { toast } from "react-hot-toast";
-
+import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [parcels, setParcels] = useState([]);
   const [loading, setLoading] = useState(true);
-
+    const navigate=useNavigate();
   useEffect(() => {
     const loadParcels = async () => {
       try {
@@ -62,7 +62,7 @@ Status: ${parcel.status}`);
                 <td className="border border-gray-300 px-4 py-2">{parcel.agent?.name || "N/A"}</td>
                 <td className="border border-gray-300 px-4 py-2">
                   <button
-                    onClick={() => showDetails(parcel)}
+                    onClick={() => navigate("/admin/parcel-control", { state: { parcel } })}
                     className="text-blue-600 hover:underline"
                   >
                     Show Details

@@ -179,6 +179,14 @@ const ParcelBooking = () => {
 					/>
 				</div>
 				<div className="flex justify-between">
+					 <button
+						type="button"
+						onClick={() => navigate("/customer/dashboard")}
+						disabled={loading}
+						className="px-5 py-2 mr-6 rounded-lg bg-gray-600 text-white font-semibold hover:bg-gray-800"
+					>
+						Cancel
+					</button>
 					{isEditing && (
 						<button
 							type="button"
@@ -192,7 +200,7 @@ const ParcelBooking = () => {
 					<button
 						type="submit"
 						disabled={loading}
-						className="w-full py-3 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-800 disabled:opacity-50 transition"
+						className="w-full py-2 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-800 disabled:opacity-50 transition"
 					>
 						Continue to Payment
 					</button>

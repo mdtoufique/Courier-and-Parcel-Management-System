@@ -33,7 +33,8 @@ export async function registerUser(data)
 		throw error;
 	}
 }
-export async function fetchParcels(token) {
+export async function fetchParcels() {
+  const token =localStorage.getItem("token")
   try {
     const res = await axios.get(`${API_BASE_URL}/api/parcels`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -91,6 +92,22 @@ export async function deleteParcel(id) {
   } catch (error) {
     console.error(
       "Error deleting parcel:",
+      error?.response?.data?.message || error.message || error
+    );
+    throw error;
+  }
+}
+
+export async function getUsers(userRole) {
+  try {
+	const token =localStorage.getItem("token")
+    const res = await axios.get(`${API_BASE_URL}/api/users/${userRole}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  } catch (error) {
+    console.error(
+      "Error fetching parcels:",
       error?.response?.data?.message || error.message || error
     );
     throw error;
