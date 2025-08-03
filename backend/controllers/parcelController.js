@@ -1,6 +1,8 @@
 import Parcel from "../models/Parcel.js";
 import Counter from "../models/Counter.js";
+import User from "../models/User.js";
 import { io } from "../server.js";
+import { sendEmail } from "../utils/sendEmail.js";
 // Create Parcel
 export const createParcel = async (req, res) => {
 	try {
@@ -104,8 +106,15 @@ export const updateParcel = async (req, res) => {
 		const { id } = req.params;
 		let updateFields = req.body;
 		const parcel = await Parcel.findById(id);
+
+		
 		if (!parcel)
 			return res.status(404).json({ message: "Parcel not found" });
+
+		const user = await User.findById(parcel.customer).select("name email");
+		console.log(user);
+		const name=user.name
+		const mail = user.email;
 
 		if (req.user.role === "agent") {
 			const { status, location, note } = updateFields;
@@ -137,21 +146,21 @@ export const updateParcel = async (req, res) => {
 			await parcel.save();
 
 			// Send email if failed
-			if (status === "Failed" && parcel.customer?.email) {
+			if (status === "Failed" && mail) {
 				await sendEmail({
-					to: parcel.customer.email,
+					to: mail,
 					subject: "Parcel Delivery Failed",
 					text: `Hello ${
-						parcel.customer.name
-					},\n\nWe're sorry, your parcel (ID: ${
-						parcel.packageId
+						name
+					},\n\nWe're sorry, your parcel (PKG - ${
+						parcel.id
 					}) could not be delivered.\n\nNote: ${
 						note || "No additional information."
 					}`,
 					html: `<p>Hello <strong>${
-						parcel.customer.name
+						name
 					}</strong>,</p><p>We're sorry, your parcel <strong>(ID: ${
-						parcel.packageId
+						parcel.id
 					})</strong> could not be delivered.</p><p><strong>Note:</strong> ${
 						note || "No additional information."
 					}</p>`,
@@ -173,23 +182,25 @@ export const updateParcel = async (req, res) => {
 		if (!updated)
 			return res.status(404).json({ message: "Parcel not found" });
 		// this two if and elsfe scope added , vul hoile baad
-		if (updated.status === "Failed" && parcel.customer?.email) {
+		console.log(updated.status, mail)
+		if (updated.status === "Failed" && mail) {
+			console.log("d");
 			await sendEmail({
-				to: parcel.customer.email,
+				to: mail,
 				subject: "Parcel Delivery Failed",
 				text: `Hello ${
-					parcel.customer.name
+					name
 				},\n\nWe're sorry, your parcel (ID: ${
-					parcel.packageId
+					parcel.id
 				}) could not be delivered.\n\nNote: ${
-					note || "No additional information."
+					 "Failed devlared From Admin."
 				}`,
 				html: `<p>Hello <strong>${
-					parcel.customer.name
+					name
 				}</strong>,</p><p>We're sorry, your parcel <strong>(ID: ${
-					parcel.packageId
+					parcel.id
 				})</strong> could not be delivered.</p><p><strong>Note:</strong> ${
-					note || "No additional information."
+					 "Failed devlared From Admin."
 				}</p>`,
 			});
 		}

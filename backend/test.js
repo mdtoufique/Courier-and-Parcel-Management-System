@@ -1,27 +1,18 @@
-import nodemailer from "nodemailer";
+import { sendEmail } from "./utils/sendEmail.js";
 import dotenv from "dotenv";
 dotenv.config();
 
 const sendTestEmail = async () => {
 	try {
-		const transporter = nodemailer.createTransport({
-			service: "gmail",
-			auth: {
-				user: process.env.EMAIL_USER,
-				pass: process.env.EMAIL_PASS,
-			},
-		});
-
-		const info = await transporter.sendMail({
-			from: `"Parcel System" <${process.env.EMAIL_USER}>`,
-			to: "@gmail.com", 
+		await sendEmail({
+			to: "mdrehmant@gmail.com", 
 			subject: "Test Email from Parcel System",
 			text: "This is a test email to verify if your email service is working.",
+			html: "<p>This is a <strong>test email</strong> to verify if your email service is working.</p>",
 		});
-
-		console.log("✅ Email sent:", info.messageId);
-	} catch (error) {
-		console.error("❌ Error sending email:", error);
+		console.log("✅ Email sent successfully");
+	} catch (err) {
+		console.error("❌ Error sending email:", err.message);
 	}
 };
 
