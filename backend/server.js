@@ -34,7 +34,7 @@ const io = new Server(server, {
     'http://localhost:5173',
     'http://localhost:5174',
     'http://192.168.0.106:5173',
-    'https://courier-and-parcel-management-syste-three.vercel.app'
+    'courier-and-parcel-management-system-1ojffshrb.vercel.app',
   ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true
