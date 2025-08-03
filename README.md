@@ -49,7 +49,7 @@ A robust full-stack **Courier & Parcel Management System** built with the **MERN
 
 - **🔐 Email Notification**  
   - Customer will get notification via email for failed parcel
-  
+
 ---
 
 - **📊 Dashboard Highlights**
@@ -270,6 +270,16 @@ npm run dev
 - Passwords are hashed with bcrypt before saving  
 - JWT tokens are signed and verified on each request  
 - Admin-only routes are protected by role-check middleware  
+
+---
+
+## 🚀 Live URLs
+
+- **Frontend URL:**  
+  `https://courier-and-parcel-management-syste-three.vercel.app`
+
+- **Backend API URL:**  
+  `https://courier-and-parcel-management-system-xz78.onrender.com`
 
 ---
 
