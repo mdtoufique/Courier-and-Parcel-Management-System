@@ -97,12 +97,6 @@ const Dashboard = () => {
 						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
 				</div>
-				<button
-					onClick={() => navigate("/")}
-					className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-				>
-					something
-				</button>
 			</div>
 			{loading && <p>Loading your assigned parcels...</p>}
 
