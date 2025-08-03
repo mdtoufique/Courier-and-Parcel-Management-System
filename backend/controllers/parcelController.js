@@ -153,14 +153,14 @@ export const updateParcel = async (req, res) => {
 					text: `Hello ${
 						name
 					},\n\nWe're sorry, your parcel (PKG - ${
-						parcel.id
+						parcel.packageId
 					}) could not be delivered.\n\nNote: ${
 						note || "No additional information."
 					}`,
 					html: `<p>Hello <strong>${
 						name
-					}</strong>,</p><p>We're sorry, your parcel <strong>(ID: ${
-						parcel.id
+					}</strong>,</p><p>We're sorry, your parcel <strong>(PKG - ${
+						parcel.packageId
 					})</strong> could not be delivered.</p><p><strong>Note:</strong> ${
 						note || "No additional information."
 					}</p>`,
@@ -190,17 +190,17 @@ export const updateParcel = async (req, res) => {
 				subject: "Parcel Delivery Failed",
 				text: `Hello ${
 					name
-				},\n\nWe're sorry, your parcel (ID: ${
-					parcel.id
+				},\n\nWe're sorry, your parcel (PKG - ${
+					parcel.packageId
 				}) could not be delivered.\n\nNote: ${
 					 "Failed devlared From Admin."
 				}`,
 				html: `<p>Hello <strong>${
 					name
-				}</strong>,</p><p>We're sorry, your parcel <strong>(ID: ${
-					parcel.id
+				}</strong>,</p><p>We're sorry, your parcel <strong>(PKG - ${
+					parcel.packageId
 				})</strong> could not be delivered.</p><p><strong>Note:</strong> ${
-					 "Failed devlared From Admin."
+					 "Failed declared From Admin."
 				}</p>`,
 			});
 		}
