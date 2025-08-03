@@ -24,24 +24,24 @@ const Home = () => {
 	return (
 		<div className="min-h-screen flex flex-col justify-between bg-gray-50 text-gray-900">
 			{/* Hero Section */}
-			<section className="text-center py-20 px-4 bg-white shadow-sm">
-				<h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-					Courier Package Tracking React App - Toufique
-				</h1>
-				<p className="text-lg font-bold md:text-xl text-blue-600 max-w-2xl mt-5 mx-auto mb-5">
-					Here are the main Features of my project 
-          </p>
-        <p className="text-lg font-bold md:text-xl text-gray-600 max-w-2xl mx-auto mb-5">
-          Email : mdrehmant@gmail.com
-          </p>
-          <p className="text-lg font-bold md:text-xl text-gray-600 max-w-2xl mx-auto mb-5">
-          Phone : 01686597517
-				</p>
-			</section>
+			<section className="text-center py-20 px-4 bg-stone-200 shadow-lg rounded-xl">
+  <h1 className="text-4xl md:text-4xl font-extrabold text-blue-700 mb-6">
+    🚚 Courier Package Tracking App – Toufique
+  </h1>
+
+  <div className="space-y-4 text-lg md:text-xl font-semibold text-gray-800">
+    <p>Email: <a href="mailto:mdrehmant@gmail.com" className="text-blue-600 hover:underline">mdrehmant@gmail.com</a></p>
+    <p>Phone: <a href="tel:01686597517" className="text-blue-600 hover:underline">01686597517</a></p>
+    <p>Portfolio: <a href="https://portfolio-react-nu-nine.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Visit Portfolio</a></p>
+  </div>
+</section>
+
 
 			{/* Features Grid */}
 			<section className="py-16 px-4 bg-gray-100">
-			
+				<h2 className="text-2xl md:text-3xl font-extrabold text-center text-blue-700 mb-10">
+					✨ Main Features of the Project ✨
+				</h2>
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
 					<FeatureCard
 						title="Real-Time Parcel Tracking"
