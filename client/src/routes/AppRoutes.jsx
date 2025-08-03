@@ -8,6 +8,11 @@ import ParcelBooking from "../pages/customer/ParcelBooking";
 import ProtectedRoute from "./ProtectedRoute";
 import ParcelControl from "../pages/admin/ParcelControl";
 import AgentDashboard from "../pages/agent/Dashboard";
+import ParcelStateUpdate from "../pages/agent/ParcelStateUpdate";
+import TrackingHistory from "../pages/TrackingHistory";
+import MoreOptions from "../pages/admin/MoreOptions"
+import Alert from "../pages/admin/Alert";
+import CustomerAlert from "../pages/customer/Alert";
 const AppRoutes = () => (
 		
 		<Routes>
@@ -39,6 +44,14 @@ const AppRoutes = () => (
 				}
 			/>
 			<Route
+				path="/agent/parcel-state-update"
+				element={
+					<ProtectedRoute allowedRoles={["agent"]}>
+						<ParcelStateUpdate />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
 				path="/admin/parcel-control"
 				element={
 					<ProtectedRoute allowedRoles={["admin"]}>
@@ -47,10 +60,43 @@ const AppRoutes = () => (
 				}
 			/>
 			<Route
+				path="/admin/more-options"
+				element={
+					<ProtectedRoute allowedRoles={["admin"]}>
+						<MoreOptions />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/admin/alert"
+				element={
+					<ProtectedRoute allowedRoles={["admin"]}>
+						<Alert />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/customer/alert"
+				element={
+					<ProtectedRoute allowedRoles={["customer"]}>
+						<CustomerAlert />
+					</ProtectedRoute>
+				}
+			/>
+			<Route
 				path="/customer/book-parcel"
 				element={
 					<ProtectedRoute allowedRoles={["customer"]}>
 						<ParcelBooking />
+					</ProtectedRoute>
+				}
+			/>
+			
+			<Route
+				path="/track-parcel"
+				element={
+					<ProtectedRoute allowedRoles={["admin","customer","agent"]}>
+						<TrackingHistory />
 					</ProtectedRoute>
 				}
 			/>

@@ -6,9 +6,9 @@ import { toast } from "react-hot-toast";
 
 const ParcelBooking = () => {
 	const navigate = useNavigate();
-	const location = useLocation();
+	const loc = useLocation();
 
-	const parcelToEdit = location.state?.parcel;
+	const parcelToEdit = loc.state?.parcel;
 
 	const isEditing = Boolean(parcelToEdit?._id);
 
@@ -22,11 +22,12 @@ const ParcelBooking = () => {
 	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+	const [location, setLocation] = useState({ lat: null, lng: null });
 	let basePrice = 0;
 	const calculateAmount = (from, to) => {
-		basePrice = 40;
-		return basePrice;
+	
+	const random = 100 + (Date.now() % 151); 
+	return Math.max(basePrice, random);
 	};
 
 	useEffect(() => {
@@ -79,6 +80,7 @@ const ParcelBooking = () => {
 		setLoading(true);
 		const parcelData = {
 			...formData,
+			location,
 			paymentMethod,
 			paymentAmount,
 		};
@@ -89,6 +91,7 @@ const ParcelBooking = () => {
 				await updateParcel(parcelToEdit._id, parcelData);
 				toast.success("Parcel updated successfully!");
 			} else {
+				console.log(parcelData);
 				await createParcel(parcelData);
 				toast.success("Parcel booked successfully!");
 			}
@@ -118,7 +121,7 @@ const ParcelBooking = () => {
 					{isEditing && (
 						<input
 							type="text"
-							value={`PKG-${parcelToEdit.packageId}`}
+							value={`PKG - ${parcelToEdit.packageId}`}
 							disabled
 							className="w-full px-5 py-3 mb-8 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 						/>
@@ -139,6 +142,64 @@ const ParcelBooking = () => {
 						required
 						className="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 					/>
+				</div>
+				
+				<div className="mb-4">
+					<label className="block mb-2 font-semibold text-gray-700">
+						Location
+					</label>
+					<div className="flex gap-2">
+						<button
+							type="button"
+							onClick={() => {
+								if (navigator.geolocation) {
+									navigator.geolocation.getCurrentPosition(
+										(pos) => {
+											setLocation({
+												lat: pos.coords.latitude,
+												lng: pos.coords.longitude,
+											});
+										},
+										() =>
+											alert("Unable to retrieve location")
+									);
+								} else {
+									alert("Geolocation not supported");
+								}
+							}}
+							className="w-1/2 bg-green-600 text-white rounded hover:bg-green-800 px-4 py-2"
+						>
+							Get Location
+						</button>
+						<div className="w-full flex gap-2">
+							<input
+								type="number"
+								step="0.0001"
+								placeholder="Latitude"
+								value={location.lat || ""}
+								onChange={(e) =>
+									setLocation((prev) => ({
+										...prev,
+										lat: parseFloat(e.target.value) || "",
+									}))
+								}
+								className="w-1/2 px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+							/>
+							<input
+								type="number"
+								step="0.0001"
+								placeholder="Longitude"
+								value={location.lng || ""}
+								onChange={(e) =>
+									setLocation((prev) => ({
+										...prev,
+										lng: parseFloat(e.target.value) || "",
+									}))
+								}
+								className="w-1/2 px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+							/>
+						</div>
+					</div>
 				</div>
 
 				<div>

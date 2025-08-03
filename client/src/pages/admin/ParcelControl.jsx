@@ -13,7 +13,8 @@ const ParcelControl = () => {
 		pickupAddress: parcelToEdit?.pickupAddress || "",
 		deliveryAddress: parcelToEdit?.deliveryAddress || "",
 		parcelType: parcelToEdit?.parcelType || "",
-		agent: parcelToEdit?.agent || "",
+		agent: parcelToEdit?.agent || null,
+		status:parcelToEdit?.status || "Booked"
 	});
 
 	const [paymentMethod, setPaymentMethod] = useState(
@@ -41,18 +42,38 @@ const ParcelControl = () => {
 		fetchAgents();
 	}, []);
 
+	// const handleChange = (e) => {
+	// 	const { name, value } = e.target;
+	// 	if (name === "agent") {
+	// 		const selectedAgent = agents.find((a) => a._id === value);
+	// 		setFormData((prev) => ({
+	// 			...prev,
+	// 			agent: selectedAgent || value, 
+	// 		}));
+	// 	} else {
+	// 		setFormData((prev) => ({ ...prev, [name]: value }));
+	// 	}
+	// 	console.log(formData.agent.name);
+	// };
 	const handleChange = (e) => {
 		const { name, value } = e.target;
+
 		if (name === "agent") {
-			const selectedAgent = agents.find((a) => a._id === value);
-			setFormData((prev) => ({
-				...prev,
-				agent: selectedAgent || value, 
-			}));
+			if (value === "") {
+				setFormData((prev) => ({
+					...prev,
+					agent: null,
+				}));
+			} else {
+				const selectedAgent = agents.find((a) => a._id === value);
+				setFormData((prev) => ({
+					...prev,
+					agent: selectedAgent || value,
+				}));
+			}
 		} else {
 			setFormData((prev) => ({ ...prev, [name]: value }));
 		}
-		console.log(formData.agent.name);
 	};
 
 	const handleDelete = async () => {
@@ -78,7 +99,8 @@ const ParcelControl = () => {
 		if (
 			!formData.pickupAddress ||
 			!formData.deliveryAddress ||
-			!formData.parcelType
+			!formData.parcelType ||
+			!formData.status
 		) {
 			toast.error("Please fill all required fields.");
 			return;
@@ -115,7 +137,17 @@ const ParcelControl = () => {
 			<form onSubmit={openConfirmationModal} className="space-y-7">
 				<input
 					type="text"
-					value={`PKG-${parcelToEdit.packageId}`}
+					value={`PKG - ${parcelToEdit.packageId}`}
+					disabled
+					className="w-full px-5 py-3 mb-4 border bg-gray-200 border-gray-300 rounded-lg"
+				/>
+				<input
+					type="text"
+					value={
+						parcelToEdit.customer?.name
+							? `Customer : ${parcelToEdit.customer.name} ( ${parcelToEdit.customer.phone} )`
+							: "No info available"
+					}
 					disabled
 					className="w-full px-5 py-3 mb-4 border bg-gray-200 border-gray-300 rounded-lg"
 				/>
@@ -123,7 +155,7 @@ const ParcelControl = () => {
 					type="text"
 					value={
 						formData.agent?.name
-							? `${formData.agent.name} - ${formData.agent.phone}`
+							? `Agent : ${formData.agent?.name} ( ${formData.agent?.phone} )`
 							: "No agent selected"
 					}
 					disabled
@@ -221,16 +253,37 @@ const ParcelControl = () => {
 
 				<div>
 					<label className="block mb-2 font-semibold text-gray-700">
+						Status
+					</label>
+					<select
+						name="status"
+						value={formData.status}
+						onChange={handleChange}
+						disabled={!isEditable}
+						className="w-full px-5 py-3 border border-gray-300 rounded-lg disabled:bg-gray-300"
+					>
+						
+						<option value="Booked">Booked</option>
+						<option value="Picked Up">Picked Up</option>
+						<option value="In Transit">In Transit</option>
+						<option value="Delivered">Delivered</option>
+						<option value="Failed">Failed</option>
+					</select>
+				</div>
+
+				<div>
+					<label className="block mb-2 font-semibold text-gray-700">
 						Assign Agent
 					</label>
 					<select
 						name="agent"
-						value={formData.agent._id}
+						value={formData.agent?._id}
 						onChange={handleChange}
                         disabled={!isEditable && isAgent}
 						className="w-full px-5 py-3 border border-gray-300 rounded-lg disabled:bg-gray-300"
 					>
 						<option value="">Select an Agent</option>
+						<option value="">Remove Agent</option>
 						{agents.map((agent) => (
 							<option key={agent._id} value={agent._id}>
 								{agent.name}

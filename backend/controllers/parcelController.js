@@ -1,9 +1,8 @@
 import Parcel from "../models/Parcel.js";
 import Counter from "../models/Counter.js";
-
+import { io } from "../server.js";
 // Create Parcel
 export const createParcel = async (req, res) => {
-	
 	try {
 		const {
 			pickupAddress,
@@ -11,6 +10,7 @@ export const createParcel = async (req, res) => {
 			parcelType,
 			paymentMethod,
 			paymentAmount,
+			location,
 		} = req.body;
 
 		if (
@@ -34,8 +34,19 @@ export const createParcel = async (req, res) => {
 			paymentAmount,
 			customer: customerId,
 		});
-
+		
+		newParcel.trackingHistory.push({
+			status: "Booked",
+			location,
+			note: "Percel Booked.",
+		});
 		await newParcel.save();
+		const created = await Parcel.findById(newParcel._id).populate(
+			"customer",
+			"name email phone role"
+		);
+		console.log(created);
+		io.emit("parcelCreated", created);
 		res.status(201).json({
 			message: "Parcel booked successfully.",
 			parcel: newParcel,
@@ -51,19 +62,28 @@ export const getParcels = async (req, res) => {
 		let parcels;
 
 		if (req.user.role === "admin") {
-			parcels = await Parcel.find().populate(
+			const filter = {};
+
+			if (req.query.customer) {
+				filter.customer = req.query.customer;
+			}
+
+			if (req.query.agent) {
+				filter.agent = req.query.agent;
+			}
+			parcels = await Parcel.find(filter).populate(
 				"customer agent",
 				"name email phone role"
 			);
 		} else if (req.user.role === "customer") {
 			parcels = await Parcel.find({ customer: req.user.id }).populate(
 				"agent",
-				"name email"
+				"name email phone"
 			);
 		} else if (req.user.role === "agent") {
 			parcels = await Parcel.find({ agent: req.user.id }).populate(
 				"customer",
-				"name email"
+				"name email phone"
 			);
 		} else {
 			return res.status(403).json({ message: "Unauthorized role" });
@@ -82,15 +102,65 @@ export const getParcels = async (req, res) => {
 export const updateParcel = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const updateFields = req.body;
+		let updateFields = req.body;
+		const parcel = await Parcel.findById(id);
+		if (!parcel)
+			return res.status(404).json({ message: "Parcel not found" });
 
-		const updated = await Parcel.findByIdAndUpdate(id, updateFields, {
+		if (req.user.role === "agent") {
+			const { status, location, note } = updateFields;
+
+			const allowedTransitions = {
+				Booked: ["Picked Up", "Failed"],
+				"Picked Up": ["In Transit", "Failed"],
+				"In Transit": ["Delivered", "Failed"],
+				Delivered: [],
+				Failed: [],
+			};
+
+			const currentStatus = parcel.status;
+			const newStatus = req.body.status;
+
+			if (!allowedTransitions[currentStatus]?.includes(newStatus)) {
+				return res.status(400).json({
+					message: `Invalid status transition from ${currentStatus} to ${newStatus}`,
+				});
+			}
+
+			parcel.trackingHistory.push({
+				status,
+				location,
+				note: note || "",
+			});
+			parcel.status = status;
+
+			await parcel.save();
+			const updated = await Parcel.findById(parcel._id).populate(
+				"customer agent",
+				"name email phone role"
+			);
+			io.emit("parcelUpdated", updated);
+			return res.status(200).json({ message: "Parcel updated", parcel });
+		}
+		
+		let updated = await Parcel.findByIdAndUpdate(id, updateFields, {
 			new: true,
 		});
 
+		
 		if (!updated)
 			return res.status(404).json({ message: "Parcel not found" });
-
+		console.log(parcel.status,updated.status);
+		if(parcel.status==="Failed" && parcel.status!==updated.status)
+		{
+			updated.trackingHistory.push({
+				status:updated.status,
+				location:updated.location,
+				note:"resolved by admin",
+			});
+			await updated.save();
+		}
+		io.emit("parcelUpdated", updated);
 		res.status(200).json({ message: "Parcel updated", parcel: updated });
 	} catch (error) {
 		res.status(500).json({

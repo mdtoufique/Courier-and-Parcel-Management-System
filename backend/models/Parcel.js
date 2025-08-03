@@ -30,6 +30,10 @@ const ParcelSchema = new mongoose.Schema(
 		trackingHistory: [
 			{
 				status: String,
+				note: {
+					type: String,
+					default: "",
+				},
 				location: {
 					lat: Number,
 					lng: Number,

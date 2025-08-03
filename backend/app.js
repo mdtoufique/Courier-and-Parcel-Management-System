@@ -3,6 +3,8 @@ import authRoutes from "./routes/authRoutes.js";
 import parcelRoutes from "./routes/parcelRoutes.js"
 import userRoutes from "./routes/userRoute.js"
 
+import http from "http";
+import { Server } from "socket.io";
 
 const app = express();
 
@@ -10,8 +12,9 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:5174',
+    'http://192.168.0.106:5173',
   ],
-  methods: ['GET', 'POST','PUT','DELETE'],
+ methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true, 
   allowedHeaders: ['Content-Type', 'Authorization']
 }));

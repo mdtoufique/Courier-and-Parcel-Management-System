@@ -16,5 +16,6 @@ export const getUsersByRole = async (req, res) => {
 			message: "Failed to fetch users",
 			error: error.message,
 		});
+		
 	}
 };
