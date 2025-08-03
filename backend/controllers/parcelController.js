@@ -34,7 +34,7 @@ export const createParcel = async (req, res) => {
 			paymentAmount,
 			customer: customerId,
 		});
-		
+
 		newParcel.trackingHistory.push({
 			status: "Booked",
 			location,
@@ -135,6 +135,29 @@ export const updateParcel = async (req, res) => {
 			parcel.status = status;
 
 			await parcel.save();
+
+			// Send email if failed
+			if (status === "Failed" && parcel.customer?.email) {
+				await sendEmail({
+					to: parcel.customer.email,
+					subject: "Parcel Delivery Failed",
+					text: `Hello ${
+						parcel.customer.name
+					},\n\nWe're sorry, your parcel (ID: ${
+						parcel.packageId
+					}) could not be delivered.\n\nNote: ${
+						note || "No additional information."
+					}`,
+					html: `<p>Hello <strong>${
+						parcel.customer.name
+					}</strong>,</p><p>We're sorry, your parcel <strong>(ID: ${
+						parcel.packageId
+					})</strong> could not be delivered.</p><p><strong>Note:</strong> ${
+						note || "No additional information."
+					}</p>`,
+				});
+			}
+
 			const updated = await Parcel.findById(parcel._id).populate(
 				"customer agent",
 				"name email phone role"
@@ -142,20 +165,47 @@ export const updateParcel = async (req, res) => {
 			io.sockets.emit("parcelUpdated", updated);
 			return res.status(200).json({ message: "Parcel updated", parcel });
 		}
-		
+
 		let updated = await Parcel.findByIdAndUpdate(id, updateFields, {
 			new: true,
 		});
 
-		
 		if (!updated)
 			return res.status(404).json({ message: "Parcel not found" });
-		if(parcel.status==="Failed" && parcel.status!==updated.status)
-		{
+		// this two if and elsfe scope added , vul hoile baad
+		if (updated.status === "Failed" && parcel.customer?.email) {
+			await sendEmail({
+				to: parcel.customer.email,
+				subject: "Parcel Delivery Failed",
+				text: `Hello ${
+					parcel.customer.name
+				},\n\nWe're sorry, your parcel (ID: ${
+					parcel.packageId
+				}) could not be delivered.\n\nNote: ${
+					note || "No additional information."
+				}`,
+				html: `<p>Hello <strong>${
+					parcel.customer.name
+				}</strong>,</p><p>We're sorry, your parcel <strong>(ID: ${
+					parcel.packageId
+				})</strong> could not be delivered.</p><p><strong>Note:</strong> ${
+					note || "No additional information."
+				}</p>`,
+			});
+		}
+		if (parcel.status === "Failed" && parcel.status !== updated.status) {
 			updated.trackingHistory.push({
-				status:updated.status,
-				location:updated.location,
-				note:"resolved by admin",
+				status: updated.status,
+				location: updated.location,
+				note: "resolved by admin",
+			});
+			await updated.save();
+		} 
+		else if (parcel.status !== "Failed" && updated.status === "Failed") {
+			updated.trackingHistory.push({
+				status: updated.status,
+				location: updated.location,
+				note: "Failed declared by admin",
 			});
 			await updated.save();
 		}
@@ -178,9 +228,10 @@ export const deleteParcel = async (req, res) => {
 		if (!parcel)
 			return res.status(404).json({ message: "Parcel not found" });
 
-		
-		if (req.user.role !== "admin" &&
-			parcel.customer.toString() !== req.user.id) {
+		if (
+			req.user.role !== "admin" &&
+			parcel.customer.toString() !== req.user.id
+		) {
 			return res.status(403).json({ message: "Unauthorized" });
 		}
 
