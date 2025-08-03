@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 const Register = () => {
 	const { user, loading } = useAuth();
 	const [showPassword, setShowPassword] = useState(false);
-    const [showrPassword, setShowrPassword] = useState(false);
+	const [showrPassword, setShowrPassword] = useState(false);
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (!loading && user) {
@@ -14,15 +14,17 @@ const Register = () => {
 		}
 	}, [user, loading, navigate]);
 
-	if (loading || user) return null;
+	
 
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
 		password: "",
+		role:"customer",
 		retypePassword: "",
 		phone: "",
 	});
+
 	const [regloading, setLoading] = useState(false);
 
 	const handleChange = (e) => {
@@ -52,6 +54,8 @@ const Register = () => {
 			toast.error(message);
 		}
 	};
+	
+	if (loading || user) return null;
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -90,6 +94,22 @@ const Register = () => {
 						value={formData.phone}
 						onChange={handleChange}
 					/>
+					<select
+						name="role"
+						value={formData.role}
+						onChange={handleChange}
+						required
+						className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					>
+						<option value="" disabled>
+							Select mode
+						</option>
+						<option value="customer">Customer</option>
+						<option value="agent">Agent</option>
+						<option value="admin">Admin</option>
+						
+						
+					</select>
 
 					<div className="relative">
 						<input
@@ -121,7 +141,7 @@ const Register = () => {
 						value={formData.password}
 						onChange={handleChange}
 					/> */}
-                    <div className="relative">
+					<div className="relative">
 						<input
 							type={showrPassword ? "text" : "password"}
 							name="retypePassword"

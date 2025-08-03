@@ -46,7 +46,7 @@ export const createParcel = async (req, res) => {
 			"name email phone role"
 		);
 		console.log(created);
-		io.emit("parcelCreated", created);
+		io.sockets.emit("parcelCreated", created);
 		res.status(201).json({
 			message: "Parcel booked successfully.",
 			parcel: newParcel,
@@ -139,7 +139,7 @@ export const updateParcel = async (req, res) => {
 				"customer agent",
 				"name email phone role"
 			);
-			io.emit("parcelUpdated", updated);
+			io.sockets.emit("parcelUpdated", updated);
 			return res.status(200).json({ message: "Parcel updated", parcel });
 		}
 		
@@ -150,7 +150,6 @@ export const updateParcel = async (req, res) => {
 		
 		if (!updated)
 			return res.status(404).json({ message: "Parcel not found" });
-		console.log(parcel.status,updated.status);
 		if(parcel.status==="Failed" && parcel.status!==updated.status)
 		{
 			updated.trackingHistory.push({
@@ -160,7 +159,7 @@ export const updateParcel = async (req, res) => {
 			});
 			await updated.save();
 		}
-		io.emit("parcelUpdated", updated);
+		io.sockets.emit("parcelUpdated", updated);
 		res.status(200).json({ message: "Parcel updated", parcel: updated });
 	} catch (error) {
 		res.status(500).json({
@@ -179,16 +178,14 @@ export const deleteParcel = async (req, res) => {
 		if (!parcel)
 			return res.status(404).json({ message: "Parcel not found" });
 
-		// Optional: allow only admin or parcel owner to delete
-		if (
-			req.user.role !== "admin" &&
-			parcel.customer.toString() !== req.user.id
-		) {
+		
+		if (req.user.role !== "admin" &&
+			parcel.customer.toString() !== req.user.id) {
 			return res.status(403).json({ message: "Unauthorized" });
 		}
 
 		await Parcel.findByIdAndDelete(id);
-
+		io.sockets.emit("parcelDeleted");
 		res.status(200).json({ message: "Parcel deleted successfully" });
 	} catch (error) {
 		res.status(500).json({

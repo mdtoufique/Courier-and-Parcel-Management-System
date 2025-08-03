@@ -27,34 +27,8 @@ const Dashboard = () => {
 		const socket = getSocket();
 
 		socket.off("parcelUpdated");
-
-		// socket.on("parcelUpdated", (updatedParcel) => {
-		// 	setParcels((prev) =>
-		// 		prev.map((p) =>
-		// 			p._id === updatedParcel._id ? updatedParcel : p
-		// 		)
-		// 	);
-		// });
-		// socket.on("parcelUpdated", (updatedParcel) => {
-		// 	setParcels((prev) => {
-		// 		const index = prev.findIndex(
-		// 			(p) => p._id === updatedParcel._id
-		// 		);
-		// 		if (index !== -1) {
-		// 			// Update existing parcel
-		// 			return prev.map((p) =>
-		// 				p._id === updatedParcel._id ? updatedParcel : p
-		// 			);
-		// 		} else {
-		// 			// Add new parcel to the list
-		// 			return [updatedParcel, ...prev];
-		// 		}
-		// 	});
-		// });
-
-
 		socket.on("parcelUpdated", (updatedParcel) => {
-			const loadParcels = async () => {
+			const tempLoadParcels = async () => {
 			try {
 					setLoading(true);
 					const fetchedParcels = await fetchParcels();
@@ -66,11 +40,29 @@ const Dashboard = () => {
 				}
 			};
 
-			loadParcels();
+			tempLoadParcels();
+		});
+
+		socket.off("parcelDeleted");
+		socket.on("parcelDeleted", () => {
+			const tempLoadParcels = async () => {
+			try {
+					setLoading(true);
+					const fetchedParcels = await fetchParcels();
+					setParcels(fetchedParcels);
+				} catch (err) {
+					toast.error("Failed to fetch parcels.");
+				} finally {
+					setLoading(false);
+				}
+			};
+
+			tempLoadParcels();
 		});
 
 		return () => {
 			socket.off("parcelUpdated");
+			socket.off("parcelDeleted");
 		};
 	}, []);
 

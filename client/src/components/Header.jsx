@@ -5,69 +5,98 @@ import { getSocket } from "../api/socket";
 import { fetchParcels } from "../api/api";
 const Header = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const { user, logout } = useAuth();
+	const { user, logout, loading } = useAuth();
 	const [failedCount, setFailedCount] = useState(0);
 	const toggleMenu = () => setIsOpen(!isOpen);
+	
 
-	useEffect(() => {
-	const loadInitialFailedParcels = async () => {
-		try {
-			const allParcels = await fetchParcels();
-			const failed = allParcels.filter((p) => p.status === "Failed");
-			setFailedCount(failed.length);
-		} catch (err) {
-			console.error("Failed to load parcels");
-		}
-	};
-	loadInitialFailedParcels();
+	// useEffect(() => {
+		
+	// 	console.log("Header mounted for", user?.role);
+	// 	const loadInitialFailedParcels = async () => {
+	// 		try {
+	// 			const allParcels = await fetchParcels();
+	// 			const failed = allParcels.filter((p) => p.status === "Failed");
+	// 			setFailedCount(failed.length);
+	// 		} catch (err) {
+	// 			console.error("Failed to load parcels");
+	// 		}
+	// 	};
+	// 	loadInitialFailedParcels();
 
-	const socket = getSocket();
+	// 	const socket = getSocket();
 
-	const handleParcelUpdate = async () => {
-		try {
-			const allParcels = await fetchParcels();
-			const failed = allParcels.filter((p) => p.status === "Failed");
-			setFailedCount(failed.length);
-		} catch (err) {
-			console.error("Failed to update failed count.");
-		}
-	};
+		
 
-	socket.on("parcelUpdated", handleParcelUpdate);
+	// 	socket.off("parcelUpdated");
+	// 	socket.on("parcelUpdated", (updatedParcel) => {
+	// 		console.log("socket call received");
+	// 		const tempLoadParcels = async () => {
+	// 		try {
+					
+	// 				const allParcels = await fetchParcels();
+	// 				const failed = allParcels.filter((p) => p.status === "Failed");
+	// 				console.log(failed.length);
+	// 				setFailedCount(failed.length);
+	// 			} catch (err) {
+	// 				console.log("Failed to fetch parcels for alert.");
+	// 			} 
+	// 		};
 
-	return () => {
-		socket.off("parcelUpdated", handleParcelUpdate);
-	};
-}, []);
+	// 		tempLoadParcels();
+	// 	});
+
+	// 	socket.off("parcelDeleted");
+	// 	socket.on("parcelDeleted", () => {
+	// 		const tempLoadParcels = async () => {
+	// 		try {
+	// 				const allParcels = await fetchParcels();
+	// 				const failed = allParcels.filter((p) => p.status === "Failed");
+	// 				console.log(failed.length);
+	// 				setFailedCount(failed.length);
+	// 			} catch (err) {
+	// 				console.log("Failed to fetch parcels for alert.");
+	// 			} 
+	// 		};
+
+	// 		tempLoadParcels();
+	// 	});
+
+	// 	return () => {
+	// 		socket.off("parcelUpdated");
+	// 		socket.off("parcelDeleted");
+	// 	};
+	// }, [loading, user?._id]);
+	// if (loading) return null;
 
 	const navLinks = [];
 
-if (!user) {
-	navLinks.push({ to: "/login", label: "Login" });
-	navLinks.push({ to: "/register", label: "Register" });
-} else {
-	navLinks.push({ to: `/${user.role}/dashboard`, label: "Dashboard" });
+	if (!user) {
+		navLinks.push({ to: "/login", label: "Login" });
+		navLinks.push({ to: "/register", label: "Register" });
+	} else {
+		navLinks.push({ to: `/${user.role}/dashboard`, label: "Dashboard" });
 
-	if (["admin", "customer"].includes(user.role)) {
-		navLinks.push({
-		to: `/${user.role}/alert`,
-		label: (
-			<div className="relative">
-				<span>Alerts</span>
-				{failedCount > 0 && (
-					<span className="absolute -top-2 -right-3 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5">
-						{failedCount}
-					</span>
-				)}
-			</div>
-		),
-	});
-	}
+		if (["admin", "customer"].includes(user.role)) {
+			navLinks.push({
+				to: `/${user.role}/alert`,
+				label: (
+					<div className="relative">
+						<span>Alerts</span>
+						{/* {failedCount > 0 && (
+							<span className="absolute -top-2 -right-3 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5">
+								{failedCount}
+							</span>
+						)} */}
+					</div>
+				),
+			});
+		}
 
-	if (user.role === "admin") {
-		navLinks.push({ to: "/admin/more-options", label: "All Info" });
+		if (user.role === "admin") {
+			navLinks.push({ to: "/admin/more-options", label: "All Info" });
+		}
 	}
-}
 	return (
 		<header className="bg-white shadow-md sticky top-0 z-50">
 			<div className="container mx-auto flex items-center justify-between px-4 py-3">

@@ -42,6 +42,16 @@ const Alert = () => {
 							<h3 className="text-lg font-semibold text-red-700">
 								📦 PKG-{parcel.packageId}
 							</h3>
+							<button
+									className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+									onClick={() =>
+										navigate("/track-parcel", {
+											state: { parcel },
+										})
+									}
+							>
+									Tracking history
+							</button>
 						</div>
 
 
@@ -53,12 +63,22 @@ const Alert = () => {
 								</tr>
 							</thead>
 							<tbody>
-								{parcel.trackingHistory.map((entry, idx) => (
+								{/* {parcel.trackingHistory.map((entry, idx) => (
 									<tr key={idx} className="hover:bg-red-50">
 										<td className="border px-3 py-2">{entry.status}</td>
 										<td className="border px-3 py-2">{entry.note || "—"}</td>
 									</tr>
-								))}
+								))} */}
+								<tr className="hover:bg-red-50">
+									<td className="border px-3 py-2">
+										{parcel.status}
+									</td>
+									<td className="border px-3 py-2">
+										{parcel.trackingHistory[
+											parcel.trackingHistory.length - 1
+										].note || "—"}
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>

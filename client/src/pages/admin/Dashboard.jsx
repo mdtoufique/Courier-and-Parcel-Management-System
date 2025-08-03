@@ -34,15 +34,35 @@ const Dashboard = () => {
 				)
 			);
 		});
+        
 		socket.off("parcelCreated");
 		socket.on("parcelCreated", (createdParcel) => {
 		setParcels((prev) => [...prev, createdParcel]);
 		});
 
+
+        socket.off("parcelDeleted");
+		socket.on("parcelDeleted", () => {
+			const tempLoadParcels = async () => {
+			try {
+					setLoading(true);
+					const fetchedParcels = await fetchParcels();
+					setParcels(fetchedParcels);
+				} catch (err) {
+					toast.error("Failed to fetch parcels.");
+				} finally {
+					setLoading(false);
+				}
+			};
+
+			tempLoadParcels();
+		});
 		return () => {
 			socket.off("parcelUpdated");
 			socket.off("parcelCreated");
+            socket.off("parcelDeleted")
 		};
+
 	}, []);
 	useEffect(() => {});
 

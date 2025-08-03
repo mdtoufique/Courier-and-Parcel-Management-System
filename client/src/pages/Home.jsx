@@ -11,15 +11,15 @@ const FeatureCard = ({ title, desc }) => (
 );
 
 const Home = () => {
-	const { user, loading } = useAuth();
-	const navigate = useNavigate();
-	useEffect(() => {
-		if (!loading && user) {
-			navigate(`/${user.role}/dashboard`);
-		}
-	}, [user, loading, navigate]);
+	// const { user, loading } = useAuth();
+	// const navigate = useNavigate();
+	// useEffect(() => {
+	// 	if (!loading && user) {
+	// 		navigate(`/${user.role}/dashboard`);
+	// 	}
+	// }, [user, loading, navigate]);
 
-	if (loading || user) return null;
+	// if (loading || user) return null;
 
 	return (
 		<div className="min-h-screen flex flex-col justify-between bg-gray-50 text-gray-900">
