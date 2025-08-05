@@ -10,6 +10,7 @@ A robust full-stack **Courier & Parcel Management System** built with the **MERN
 - **Backend:** Node.js, Express  
 - **Database:** MongoDB (Mongoose)  
 - **Authentication:** JWT (JSON Web Tokens)  
+- **Real-time:** Socket.IO  
 - **HTTP:** Axios  
 
 ---
