@@ -287,4 +287,4 @@ npm run dev
 ## 📧 Contact
 
 - **GitHub:** [mdtoufique](https://github.com/mdtoufique)  
-- **Email:** mdrehmant@email.com
+- **Email:** mdrehmant@gmail.com
