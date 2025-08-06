@@ -244,7 +244,7 @@ const ParcelBooking = () => {
 						type="button"
 						onClick={() => navigate("/customer/dashboard")}
 						disabled={loading}
-						className="px-5 py-2 mr-6 rounded-lg bg-gray-600 text-white font-semibold hover:bg-gray-800"
+						className="text-sm md:text-base px-3 py-1.5 md:px-5 md:py-2 mr-6 rounded-lg bg-gray-600 text-white font-semibold hover:bg-gray-800"
 					>
 						Cancel
 					</button>
@@ -253,7 +253,7 @@ const ParcelBooking = () => {
 							type="button"
 							onClick={()=>setShowDeleteModal(true)}
 							disabled={loading}
-							className="px-5 py-2 mr-6 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-800 transition"
+							className="text-sm md:text-base px-3 py-1.5 md:px-5 md:py-2 mr-6 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-800 transition"
 						>
 							Delete
 						</button>

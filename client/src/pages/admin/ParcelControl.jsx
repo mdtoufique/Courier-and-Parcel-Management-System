@@ -298,7 +298,7 @@ const ParcelControl = () => {
 						type="button"
 						onClick={() => navigate("/admin/dashboard")}
 						disabled={loading}
-						className="px-5 py-2 mr-6 rounded-lg bg-gray-600 text-white font-semibold hover:bg-gray-800"
+						className="text-sm md:text-base px-3 py-1.5 md:px-5 md:py-2 mr-6 rounded-lg bg-gray-600 text-white font-semibold hover:bg-gray-800"
 					>
 						Cancel
 					</button>
@@ -306,7 +306,7 @@ const ParcelControl = () => {
 					<button
 						type="button"
 						onClick={() => {setIsEditable((prev) => !prev);setIsAgent(true);}}
-						className="px-5 py-2 mr-6 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-800"
+						className="text-sm md:text-base px-3 py-1.5 md:px-5 md:py-2 mr-6 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-800"
 					>
 						{isEditable ? "Editing..." : "Edit"}
 					</button>
@@ -314,14 +314,14 @@ const ParcelControl = () => {
 						type="button"
 						onClick={() => setShowDeleteModal(true)}
 						disabled={loading}
-						className="px-5 py-2 mr-6 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-800"
+						className="text-sm md:text-base px-3 py-1.5 md:px-5 md:py-2 mr-6 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-800"
 					>
 						Delete
 					</button>
 					<button
 						type="submit"
 						disabled={loading}
-						className="w-full py-2 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-800"
+						className="w-full text-sm md:text-base px-3 py-1.5 md:px-5 md:py-2 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-800"
 					>
 						Confirm
 					</button>
