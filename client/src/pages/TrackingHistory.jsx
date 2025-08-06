@@ -53,7 +53,8 @@ const TrackingHistory = () => {
 					No tracking updates available.
 				</p>
 			) : (
-				<table className="w-full table-auto border-collapse border border-gray-300">
+				<div className="overflow-x-auto w-full">
+					<table className="w-full table-auto border-collapse border border-gray-300">
 					<thead className="bg-gray-100">
 						<tr>
 							<th className="border border-gray-300 px-4 py-2">
@@ -89,6 +90,7 @@ const TrackingHistory = () => {
 						))}
 					</tbody>
 				</table>
+				</div>
 			)}
 
 			<div className="mt-6 text-center">

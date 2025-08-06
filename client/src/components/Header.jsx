@@ -194,9 +194,10 @@ const Header = () => {
 								logout();
 								setIsOpen(false);
 							}}
-							className="block w-full text-left font-medium text-red-600 hover:underline"
+							className="block w-full text-left font-medium text-red-600"
 						>
-							Logout
+							<span className="hover:underline">Logout</span>{" "}
+							<span className="text-black">({user.name} - {user.role})</span>
 						</button>
 					)}
 				</nav>
