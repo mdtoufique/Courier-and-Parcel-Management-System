@@ -125,7 +125,9 @@ const MoreOptions = () => {
 			{!loading && view === "users" && (
 				<div className="mt-6 bg-white p-4 border rounded shadow">
 					<h2 className="text-xl font-semibold mb-4 text-gray-700">Users</h2>
-					<table className="w-full border-collapse border border-gray-300 rounded mb-4">
+					<div className="overflow-x-auto w-full mb-4">
+  						<table className="w-full border-collapse border border-gray-300 rounded">
+
 						<thead className="bg-gray-100">
 							<tr>
 								<th className="border border-gray-300 px-3 py-1 text-left">
@@ -148,7 +150,9 @@ const MoreOptions = () => {
 											? "bg-blue-200"
 											: ""
 									}`}
-									onClick={() => onSelectPerson(user)}
+									onClick={() => {
+                        setSelectedParcel(null);
+						setParcels([]);onSelectPerson(user)}}
 								>
 									<td className="border border-gray-300 px-3 py-1">
 										{user.name}
@@ -163,13 +167,15 @@ const MoreOptions = () => {
 							))}
 						</tbody>
 					</table>
+					</div>
 				</div>
 			)}
 
 			{!loading && view === "agents" && (
 				<div className="mt-6 bg-white p-4 border rounded shadow">
 					<h2 className="text-xl font-semibold mb-4 text-gray-700">Agents</h2>
-					<table className="w-full border-collapse border border-gray-300 rounded mb-4">
+					<div className="overflow-x-auto w-full mb-4">
+  						<table className="w-full border-collapse border border-gray-300 rounded">
 						<thead className="bg-gray-100">
 							<tr>
 								<th className="border border-gray-300 px-3 py-1 text-left">
@@ -187,12 +193,14 @@ const MoreOptions = () => {
 							{agents.map((agent) => (
 								<tr
 									key={agent._id}
-									className={`cursor-pointer hover:bg-green-100 ${
+									className={`cursor-pointer hover:bg-blue-100 ${
 										selectedPerson?._id === agent._id
-											? "bg-green-200"
+											? "bg-blue-200"
 											: ""
 									}`}
-									onClick={() => onSelectPerson(agent)}
+									onClick={() => {
+                        setSelectedParcel(null);
+						setParcels([]);onSelectPerson(agent)}}
 								>
 									<td className="border border-gray-300 px-3 py-1">
 										{agent.name}
@@ -207,6 +215,7 @@ const MoreOptions = () => {
 							))}
 						</tbody>
 					</table>
+					</div>
 				</div>
 			)}
 
@@ -219,6 +228,8 @@ const MoreOptions = () => {
 					{parcels.length === 0 ? (
 						<p>No parcels found.</p>
 					) : (
+						<div className="overflow-x-auto w-full">
+  						
 						<table className="w-full border border-gray-300 rounded">
 							<thead className="bg-gray-100">
 								<tr>
@@ -240,7 +251,9 @@ const MoreOptions = () => {
 								{parcels.map((parcel) => (
 									<tr
 										key={parcel._id}
-										className="hover:bg-gray-200 cursor-pointer"
+										className={`cursor-pointer hover:bg-blue-100 ${
+											selectedParcel?._id === parcel._id ? "bg-blue-200" : ""
+										}`}
 										onClick={() => {
 											setSelectedParcel(parcel);
 											setTracking(parcel.trackingHistory);
@@ -260,6 +273,7 @@ const MoreOptions = () => {
 								))}
 							</tbody>
 						</table>
+						</div>
 					)}
 				</div>
 			)}
@@ -271,6 +285,7 @@ const MoreOptions = () => {
 					{tracking.length === 0 ? (
 						<p>No tracking updates available.</p>
 					) : (
+						<div className="overflow-x-auto w-full">
 						<table className="w-full border-collapse border border-gray-300">
 							<thead className="bg-gray-100">
 								<tr>
@@ -309,6 +324,7 @@ const MoreOptions = () => {
 								))}
 							</tbody>
 						</table>
+						</div>
 					)}
 				</div>
 			)}
